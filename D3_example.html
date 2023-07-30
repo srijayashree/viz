@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple Bar Chart</title>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+</head>
+<body>
+    <svg width="400" height="300"></svg>
+    <script>
+        // Sample data
+        var data = [10, 30, 25, 40, 15];
+
+        // Create scales for x and y axis
+        var xScale = d3.scaleBand()
+            .domain(["A", "B", "C", "D", "E"])
+            .range([0, 400])
+            .padding(0.1);
+
+        var yScale = d3.scaleLinear()
+            .domain([0, d3.max(data)])
+            .range([300, 0]);
+
+        // Create the SVG element
+        var svg = d3.select("svg");
+
+        // Create the bars
+        svg.selectAll("rect")
+            .data(data)
+            .enter()
+            .append("rect")
+            .attr("x", function(d, i) { return xScale("ABCDE"[i]); })
+            .attr("y", function(d) { return yScale(d); })
+            .attr("width", xScale.bandwidth())
+            .attr("height", function(d) { return 300 - yScale(d); })
+            .attr("fill", "blue");
+
+        // Create x-axis
+        var xAxis = d3.axisBottom(xScale);
+
+        svg.append("g")
+            .attr("transform", "translate(0, 300)")
+            .call(xAxis);
+
+        // Create y-axis
+        var yAxis = d3.axisLeft(yScale)
+            .tickFormat(d3.format("~s"));
+
+        svg.append("g")
+            .call(yAxis);
+    </script>
+</body>
+</html>
